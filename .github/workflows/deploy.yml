@@ -33,7 +33,7 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    # Ejecución de Pruebas (IE2)
+    # Ejecución de Pruebas
     - name: Ejecutar Pruebas Unitarias (Despachos)
       env:
         DB_ENDPOINT: localhost
@@ -65,7 +65,7 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       run: |
         cd back-Despachos_SpringBoot/Springboot-API-REST-DESPACHO
-        chmod +x mvnw || true
+        rm -f mvnw mvnw.cmd
         snyk test --severity-threshold=high
 
     - name: Escaneo Snyk - Back Ventas
@@ -73,7 +73,7 @@ jobs:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       run: |
         cd back-Ventas_SpringBoot/Springboot-API-REST
-        chmod +x mvnw || true
+        rm -f mvnw mvnw.cmd
         snyk test --severity-threshold=high
 
     # Construcción y Despliegue (IE4)
