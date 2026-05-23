@@ -1,0 +1,91 @@
+
+services:
+  # ==========================================
+  # 1. Base de Datos MySQL
+  # ==========================================
+  db:
+    image: mysql:8.0
+    container_name: mysql_database
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: ecommerce_db
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+  # ==========================================
+  # 2. Microservicio: Back Despachos
+  # ==========================================
+  back-despachos:
+    build:
+       context: ./back-Despachos_SpringBoot/Springboot-API-REST-DESPACHO
+
+    container_name: api_despachos
+    ports:
+      - "8081:8080" # Expone en el puerto 8081 de tu máquina
+    environment:
+      # Sobrescribe las credenciales de application.properties para usar el contenedor db
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/ecommerce_db?useSSL=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=rootpassword
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  # ==========================================
+  # 3. Microservicio: Back Ventas
+  # ==========================================
+  back-ventas:
+    build:
+      context: ./back-Ventas_SpringBoot/Springboot-API-REST
+
+    container_name: api_ventas
+    ports:
+      - "8082:8080" # Expone en el puerto 8082 de tu máquina
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/ecommerce_db?useSSL=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=rootpassword
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  # ==========================================
+  # 4. Frontend: Despacho (Nginx)
+  # ==========================================
+  front-despacho:
+    build:
+      context: ./front_despacho
+    container_name: ui_frontend
+    ports:
+      - "80:80" # Expone el frontend en el puerto por defecto
+    depends_on:
+      - back-despachos
+      - back-ventas
+    networks:
+      - app-network
+
+# ==========================================
+# Configuración de Redes y Volúmenes
+# ==========================================
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data: # Persistencia para que los datos de MySQL no se borren al apagar
