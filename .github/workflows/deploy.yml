@@ -7,6 +7,8 @@ on:
 jobs:
   build-test-and-push:
     runs-on: ubuntu-latest
+
+    # Base de datos efímera para pruebas unitarias
     services:
       mysql:
         image: mysql:8.0
@@ -53,6 +55,26 @@ jobs:
         cd back-Ventas_SpringBoot/Springboot-API-REST
         mvn clean test
 
+
+    # Escaneo de Seguridad con SNYK
+    - name: Configurar Snyk CLI
+      uses: snyk/actions/setup@master
+
+    - name: Escaneo Snyk - Back Despachos
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      run: |
+        cd back-Despachos_SpringBoot/Springboot-API-REST-DESPACHO
+        snyk test --severity-threshold=high
+
+    - name: Escaneo Snyk - Back Ventas
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      run: |
+        cd back-Ventas_SpringBoot/Springboot-API-REST
+        snyk test --severity-threshold=high
+
+    # Construcción y Despliegue 
     - name: Login en Docker Hub
       uses: docker/login-action@v2
       with:
