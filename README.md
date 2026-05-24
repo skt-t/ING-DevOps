@@ -29,6 +29,7 @@ La arquitectura del proyecto en el repositorio se distribuye de la siguiente man
 │   ├── 📄 package.json
 │   └── 📄 Dockerfile
 └── 📄 docker-compose.yml
+```
 🛠️ Tecnologías Utilizadas
 Backend: Java 17, Spring Boot, Maven
 
