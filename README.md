@@ -70,20 +70,34 @@ Push a Registry: Autentica de forma segura y realiza un push automatizado de los
 A continuación, se documentan las pruebas de la correcta ejecución de nuestras estrategias DevOps:
 
 Ejecución Exitosa del Pipeline en GitHub Actions
-![Evidencia GitHub Actions](https://media.discordapp.net/attachments/1249956660756222063/1507594481174708264/image.png?ex=6a127846&is=6a1126c6&hm=31dfc55783c83362db609c957a53bf20c4cef1b22103fcd789f50e2ccb67eb22&=&format=webp&quality=lossless&width=1872&height=729)
+![Evidencia GitHub Actions]
+
+<img width="1898" height="739" alt="image1" src="https://github.com/user-attachments/assets/00a3fee4-a883-443a-8c8e-c95b07fc24aa" />
 
 Imágenes Construidas y Publicadas en Docker Hub
-![Evidencia Docker Hub](https://cdn.discordapp.com/attachments/1249956660756222063/1507594925917601832/Captura_de_pantalla_20260523_000305.png?ex=6a1278b0&is=6a112730&hm=ede52f7d0e6961403a9bd5b3b4de5efa34225f395b04006579c9509e7fe1b990&)
+![Evidencia Docker Hub]
+
+<img width="1849" height="537" alt="image2" src="https://github.com/user-attachments/assets/99005c89-a806-4ca1-906f-89668d2db06f" />
 
 Reporte de Vulnerabilidades y Gobernanza (Snyk)
-![Evidencia Snyk](https://cdn.discordapp.com/attachments/1249956660756222063/1507607607634825266/image.png?ex=6a12847f&is=6a1132ff&hm=55c3af6f223d09e966e176c5f91d57728a1be5060bf0119e95ee399a243379cb&)
+![Evidencia Snyk]
+![Imagen de prueba: snyk impide subir imagen con problemas de seguridad]
+<img width="1878" height="742" alt="image4" src="https://github.com/user-attachments/assets/be82e27e-9cc2-4775-8ef9-a26576fc5eb6" />
+
+![Imagen de prueba: snyk permite subir la imagen]
+<img width="1898" height="877" alt="image3" src="https://github.com/user-attachments/assets/88b3170f-3fa2-4ec1-8bac-e9aa92493e32" />
+
+![Imagen de prueba: observacion de ambas pipelines]
+<img width="1452" height="386" alt="image4" src="https://github.com/user-attachments/assets/ae6b0f21-8ed8-4e1d-b7a1-1bd93d0fa52c" />
+
 
 🤖 Declaración de Uso de Herramientas de IA
 Por medio del presente párrafo, se declara de manera formal que se utilizaron herramientas de Inteligencia Artificial (IA) generativa como apoyo exclusivo para la estructuración, formato Markdown y redacción técnica de este documento README.md. Este uso se ciñe estrictamente a las labores de documentación y generación de diagramas conceptuales, cumpliendo en su totalidad con las normativas éticas y académicas establecidas en la rúbrica del curso.
 
 🧠 Reflexión Crítica y Conclusiones Individuales
 Cory Leveke
-[Cada integrante redactará su conclusión aquí de forma manual, ya que está prohibido el uso de IA para esta sección según la rúbrica]
+Con este proyecto aprendi a trabajar en un entorno donde el CI/CD se integra de forma eficiente, a pesar de las dificultades que existen en entornos donde muchas personas colaboran, la division por branch de feature, fix y choir simplifica mucho el trabajo en equipo.
+Tambien aprendi lo eficiente que puede ser una pipeline en github actions, subir de forma automatica una imagen simplifica y agiliza mucho el trabajo de despliegue, y con la implementacion de snyk, la segurirdad va sobrada. claro que configurar el sistema es complejo, pero una vez listo, es un peso menos de encima.
 
 Allan Nuñez
 [Cada integrante redactará su conclusión aquí de forma manual, ya que está prohibido el uso de IA para esta sección según la rúbrica]
