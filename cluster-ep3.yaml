@@ -1,0 +1,17 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: cluster-evaluacion-3
+  region: us-east-1
+
+iam:
+  serviceRoleARN: arn:aws:iam::319511840360:role/LabRole
+
+managedNodeGroups:
+  - name: nodos-microservicios
+    instanceType: t3.medium
+    minSize: 2
+    maxSize: 2
+    iam:
+      instanceRoleARN: arn:aws:iam::319511840360:role/LabRole
