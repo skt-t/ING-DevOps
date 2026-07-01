@@ -68,6 +68,8 @@ jobs:
         args: >
           -Dsonar.projectKey=skt-t_ING-DevOps
           -Dsonar.organization=chiquitinalikeschocolato
+          -Dsonar.java.binaries=**/target/classes
+          -Dsonar.language=java
 
     # Escaneo de Seguridad con SNYK
     - name: Configurar Snyk CLI
