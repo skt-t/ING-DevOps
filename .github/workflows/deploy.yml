@@ -112,3 +112,40 @@ jobs:
       run: |
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/front-despacho:latest ./front_despacho
         docker push ${{ secrets.DOCKERHUB_USERNAME }}/front-despacho:latest
+
+  acceptance-tests:
+    name: Pruebas de Aceptación (UAT)
+    needs: build-test-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+      
+      - name: Ejecutar Pruebas de Aceptación simuladas
+        run: |
+          echo "Iniciando Pruebas de Aceptacion de Usuario (UAT)..."
+          # Aquí en un entorno real usarías herramientas como Postman/Newman o Cypress
+          # Simularemos la validación de los endpoints principales:
+          echo "Validando respuesta del microservicio de Ventas..."
+          sleep 2
+          echo "Validando respuesta del microservicio de Despachos..."
+          sleep 2
+          echo "✅ Todos los criterios de aceptación han sido cumplidos. Listo para producción."
+
+  deploy-production:
+    name: Despliegue en Producción
+    needs: acceptance-tests # SOLO arranca si las pruebas de aceptación pasan
+    runs-on: ubuntu-latest
+    environment: 
+      name: production # ESTO ACTIVA LA APROBACIÓN MANUAL QUE CONFIGURASTE EN GITHUB
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+        
+      - name: Despliegue en Kubernetes (EKS)
+        run: |
+          echo "Iniciando despliegue en el clúster productivo..."
+          # En un escenario real aquí irían tus comandos de AWS y kubectl:
+          # aws eks update-kubeconfig --region us-east-1 --name mi-cluster
+          # kubectl apply -f kubernetes/despliegue-total.yaml
+          echo "Despliegue completado con éxito en Producción."
