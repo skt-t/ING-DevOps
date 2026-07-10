@@ -1,15 +1,13 @@
-# 🚀 Evaluación Parcial 2 - Arquitectura de Microservicios y DevOps
+🚀 Evaluación Parcial 3 - Observabilidad, Calidad y CI/CD en Microservicios
+📖 Descripción del Proyecto
+Este proyecto implementa una arquitectura basada en microservicios gestionada bajo un enfoque de Monorepo. El ecosistema está diseñado para el procesamiento y gestión de transacciones comerciales, separando lógicamente los dominios en dos servicios backend independientes (Ventas y Despachos), los cuales son consumidos por una interfaz de usuario centralizada.
 
-## 📖 Descripción del Proyecto
-Este proyecto implementa una arquitectura basada en microservicios gestionada bajo un enfoque de **Monorepo**. El ecosistema está diseñado para el procesamiento y gestión de transacciones comerciales, separando lógicamente los dominios en dos servicios backend independientes (Ventas y Despachos), los cuales son consumidos por una interfaz de usuario centralizada. Toda la infraestructura se encuentra contenerizada y administrada mediante prácticas de Integración y Despliegue Continuo (CI/CD), garantizando la calidad del código, la seguridad y la automatización del flujo de entrega.
+Para esta fase, la infraestructura se ha fortalecido integrando prácticas avanzadas de DevOps: despliegue en clústeres de Kubernetes (EKS), observabilidad del tráfico en tiempo real, monitoreo de recursos en la nube y un pipeline de CI/CD estricto que asegura la calidad del código y la seguridad antes de cualquier paso a producción.
 
----
-
-## 📂 Estructura del Repositorio
-
+📂 Estructura del Repositorio
 La arquitectura del proyecto en el repositorio se distribuye de la siguiente manera:
-
-```text
+```
+Plaintext
 📦 monorepo-evaluacion
 ├── 📁 .github
 │   └── 📁 workflows
@@ -28,7 +26,8 @@ La arquitectura del proyecto en el repositorio se distribuye de la siguiente man
 │   ├── 📁 src
 │   ├── 📄 package.json
 │   └── 📄 Dockerfile
-└── 📄 docker-compose.yml
+└── 📁 kubernetes
+    └── 📄 despliegue-total.yaml
 ```
 🛠️ Tecnologías Utilizadas
 Backend: Java 17, Spring Boot, Maven
@@ -37,71 +36,56 @@ Base de Datos: MySQL
 
 Frontend: Interfaz de usuario (Web)
 
-Contenerización y Orquestación Local: Docker, Docker Compose V2
+Contenerización y Orquestación: Docker, Kubernetes (AWS EKS)
+
+Observabilidad y Malla de Servicios: Istio, Kiali
+
+Monitoreo y Alertas: AWS CloudWatch, AWS SNS
 
 CI/CD Pipeline: GitHub Actions
 
-Container Registry: Docker Hub
+Calidad y Seguridad (Shift-Left): SonarCloud, Snyk
 
-🚀 Instrucciones de Despliegue Local
-Para levantar todo el entorno de desarrollo de forma local y simultánea, asegúrese de tener el demonio de Docker en ejecución. Navegue hasta la raíz del repositorio clonado:
+⚙️ Explicación del Pipeline CI/CD y Calidad
+El proyecto cuenta con un flujo automatizado configurado en GitHub Actions (.github/workflows/deploy.yml). Este pipeline opera como una barrera de calidad estricta (Fail-Fast):
 
-Bash
-cd <ruta-del-repositorio>
-Ejecute el siguiente comando para construir las imágenes a partir de los Dockerfile de cada directorio y levantar la base de datos, los backends y el frontend en segundo plano:
+Testing Automático: Ejecuta la suite de pruebas unitarias implementadas con JUnit en los servicios backend.
 
-Bash
-docker compose up -d --build
-Para detener el ecosistema y limpiar los contenedores, utilice:
+Aseguramiento de Calidad (SonarCloud): Realiza un escaneo profundo del código para detectar deuda técnica, bugs y vulnerabilidades. Si el código no supera el Quality Gate, el pipeline se interrumpe automáticamente.
 
-Bash
-docker compose down
-⚙️ Explicación del Pipeline CI/CD
-El proyecto cuenta con un flujo automatizado configurado en GitHub Actions (.github/workflows/deploy.yml). Este pipeline se ejecuta bajo un esquema estricto de validación y consta de las siguientes etapas:
+Gobernanza (Snyk): Análisis estático de dependencias. Bloquea el flujo si se detectan vulnerabilidades críticas.
 
-Testing Automático: Ejecuta la suite de pruebas unitarias implementadas con JUnit en ambos servicios backend para validar la integridad de la lógica de negocio antes de cualquier compilación, apoyándose en una base de datos efímera.
-
-Seguridad y Gobernanza: Realiza un análisis estático de dependencias utilizando Snyk. Si se detectan vulnerabilidades críticas o altas, el sistema genera un reporte detallado (modo auditoría) para su mitigación, cumpliendo con los estándares de seguridad shift-left.
-
-Build (Construcción): Una vez aprobadas las validaciones anteriores, el flujo procesa de manera independiente cada Dockerfile para empaquetar los microservicios y el frontend en imágenes Docker optimizadas.
-
-Push a Registry: Autentica de forma segura y realiza un push automatizado de los artefactos construidos hacia nuestro repositorio centralizado en Docker Hub, dejándolos listos para un eventual despliegue en producción.
+Build & Push: Empaqueta los microservicios y publica las imágenes en Docker Hub solo si las fases de calidad y pruebas son exitosas.
 
 📊 Trazabilidad y Evidencia
 A continuación, se documentan las pruebas de la correcta ejecución de nuestras estrategias DevOps:
 
-Ejecución Exitosa del Pipeline en GitHub Actions
-![Evidencia GitHub Actions]
+1. Ejecución del Pipeline en GitHub Actions
+Validación del flujo automatizado, mostrando la capacidad de detener el despliegue ante fallas de análisis y el éxito tras las correcciones.
 
-<img width="1898" height="739" alt="image1" src="https://github.com/user-attachments/assets/00a3fee4-a883-443a-8c8e-c95b07fc24aa" />
+2. Análisis de Calidad de Código (SonarCloud)
+Evidencia de la integración de SonarCloud en el proyecto para auditar la mantenibilidad, confiabilidad y seguridad del código fuente.
 
-Imágenes Construidas y Publicadas en Docker Hub
-![Evidencia Docker Hub]
+3. Observabilidad de la Malla de Servicios (Kiali)
+Visualización en tiempo real del tráfico de red entre los microservicios de despachos, ventas y la base de datos dentro del clúster de Kubernetes, gestionado por Istio.
 
-<img width="1849" height="537" alt="image2" src="https://github.com/user-attachments/assets/99005c89-a806-4ca1-906f-89668d2db06f" />
+4. Monitoreo y Alertas Críticas (AWS SNS y CloudWatch)
+Configuración de un tópico de notificaciones estándar (SNS) para alertar al equipo de operaciones.
 
-Reporte de Vulnerabilidades y Gobernanza (Snyk)
-![Evidencia Snyk]
-![Imagen de prueba: snyk impide subir imagen con problemas de seguridad]
-<img width="1878" height="742" alt="image4" src="https://github.com/user-attachments/assets/be82e27e-9cc2-4775-8ef9-a26576fc5eb6" />
-
-![Imagen de prueba: snyk permite subir la imagen]
-<img width="1898" height="877" alt="image3" src="https://github.com/user-attachments/assets/88b3170f-3fa2-4ec1-8bac-e9aa92493e32" />
-
-![Imagen de prueba: observacion de ambas pipelines]
-<img width="1452" height="386" alt="image4" src="https://github.com/user-attachments/assets/ae6b0f21-8ed8-4e1d-b7a1-1bd93d0fa52c" />
-
+Creación de una alarma en CloudWatch configurada para dispararse y notificar si la utilización de CPU del servidor supera el 80% durante un período sostenido.
 
 🤖 Declaración de Uso de Herramientas de IA
-Por medio del presente párrafo, se declara de manera formal que se utilizaron herramientas de Inteligencia Artificial (IA) generativa como apoyo exclusivo para la estructuración, formato Markdown y redacción técnica de este documento README.md. Este uso se ciñe estrictamente a las labores de documentación y generación de diagramas conceptuales, cumpliendo en su totalidad con las normativas éticas y académicas establecidas en la rúbrica del curso.
+Por medio del presente párrafo, se declara de manera formal que se utilizaron herramientas de Inteligencia Artificial (IA) generativa como apoyo exclusivo para la estructuración, formato Markdown y redacción técnica de este documento README.md. Este uso se ciñe estrictamente a las labores de documentación, cumpliendo en su totalidad con las normativas éticas y académicas establecidas en la rúbrica del curso.
 
-🧠 Reflexión Crítica y Conclusiones Individuales
-Cory Leveke
-Con este proyecto aprendi a trabajar en un entorno donde el CI/CD se integra de forma eficiente, a pesar de las dificultades que existen en entornos donde muchas personas colaboran, la division por branch de feature, fix y choir simplifica mucho el trabajo en equipo.
-Tambien aprendi lo eficiente que puede ser una pipeline en github actions, subir de forma automatica una imagen simplifica y agiliza mucho el trabajo de despliegue, y con la implementacion de snyk, la segurirdad va sobrada. claro que configurar el sistema es complejo, pero una vez listo, es un peso menos de encima.
+Pruebas de Kiali
+<img width="1853" height="660" alt="eva3-devops-2" src="https://github.com/user-attachments/assets/071a456e-bd16-47a2-9784-7de491de9612" />
 
-Allan Nuñez
-[Cada integrante redactará su conclusión aquí de forma manual, ya que está prohibido el uso de IA para esta sección según la rúbrica]
+Pruebas de Notificacion por correo al colapsar
+<img width="1859" height="933" alt="eva3-devops" src="https://github.com/user-attachments/assets/406c1be2-6125-45eb-b7b7-cc1fdb486eb0" />
 
-Benjamín Ruz
-[Cada integrante redactará su conclusión aquí de forma manual, ya que está prohibido el uso de IA para esta sección según la rúbrica]
+Reglas de la alerta, si supera el 80% envia notificacion
+<img width="1455" height="712" alt="eva3-devops-3" src="https://github.com/user-attachments/assets/9ac3c757-f3c5-49ef-8931-af41c6b1fbce" />
+
+Pipeline Existoso
+<img width="1856" height="497" alt="eva3-devops-4" src="https://github.com/user-attachments/assets/c2802a77-9504-4635-b73c-456306680ab7" />
+
