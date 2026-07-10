@@ -89,3 +89,17 @@ Reglas de la alerta, si supera el 80% envia notificacion
 Pipeline Existoso
 <img width="1856" height="497" alt="eva3-devops-4" src="https://github.com/user-attachments/assets/c2802a77-9504-4635-b73c-456306680ab7" />
 
+### 5. Pruebas de Aceptación (UAT) y Aprobación Manual (Gobernanza)
+Para asegurar el cumplimiento de normativas de seguridad y evitar despliegues accidentales (IE13), el pipeline final incorpora dos etapas de control estricto antes del paso a producción:
+
+* **Pruebas de Aceptación:** Se configuró un job (`acceptance-tests`) que valida los criterios mínimos del negocio tras la construcción de las imágenes. Si estas pruebas fallan, el código no avanza.
+* **Políticas de Aprobación Manual:** Se implementó un entorno protegido (`production`) mediante las *Environment protection rules* de GitHub. El flujo de despliegue continuo se interrumpe intencionalmente, requiriendo la revisión y aprobación explícita (clic manual) de un administrador del repositorio antes de ejecutar los comandos en el clúster de Kubernetes (EKS).
+
+*Evidencia del pipeline detenido por políticas de seguridad, esperando revisión manual:*
+<img width="1428" height="827" alt="imagen-pruebas-2" src="https://github.com/user-attachments/assets/cb8cf30d-b1a5-4e99-907f-67bee38128d9" />
+
+
+*Evidencia de la aprobación y despliegue final exitoso:*
+<img width="1422" height="677" alt="imagen-pruebas-3" src="https://github.com/user-attachments/assets/d6b6164a-e4c1-4c2e-8275-d95fcb29d257" />
+
+
